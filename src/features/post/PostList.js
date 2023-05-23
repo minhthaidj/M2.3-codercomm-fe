@@ -8,8 +8,14 @@ import PostEdit from "./PostEdit";
 
 function PostList({ userId }) {
   const [postEdited, setPostEdited] = useState(null);
+  const [open, setOpen] = useState(false);
   const handleEditPost = (post) => {
     setPostEdited(post);
+    setOpen(true);
+  };
+
+  const handleUpdateButtonClicked = () => {
+    setOpen(false);
   };
 
   const [page, setPage] = useState(1);
@@ -51,15 +57,18 @@ function PostList({ userId }) {
       </Box>
       <Modal
         sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
-        open={!!postEdited}
-        onClose={() => setPostEdited(null)}
+        open={open}
+        onClose={() => {}}
       >
         <Box
           sx={{
             width: { xs: "80vw", md: 650 },
           }}
         >
-          <PostEdit post={postEdited} />
+          <PostEdit
+            post={postEdited}
+            handleUpdateButtonClicked={handleUpdateButtonClicked}
+          />
         </Box>
       </Modal>
     </>

@@ -18,7 +18,7 @@ export default function CommentMore({ comment, postId }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  //   console.log(comment);
+
   return (
     <div>
       <Button

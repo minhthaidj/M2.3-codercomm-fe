@@ -15,8 +15,11 @@ import PostReaction from "./PostReaction";
 import CommentForm from "../comment/CommentForm";
 import CommentList from "../comment/CommentList";
 import PostMoreVert from "./PostMoreVert";
+import useAuth from "../../hooks/useAuth";
 
 function PostCard({ post, handleEdit }) {
+  const { user } = useAuth();
+  console.log("user", user);
   return (
     <Card>
       <CardHeader
@@ -43,7 +46,11 @@ function PostCard({ post, handleEdit }) {
             {fDate(post.createdAt)}
           </Typography>
         }
-        action={<PostMoreVert post={post} handleEdit={handleEdit} />}
+        action={
+          post?.author._id === user._id && (
+            <PostMoreVert post={post} handleEdit={handleEdit} />
+          )
+        }
       />
 
       <Stack spacing={2} sx={{ p: 3 }}>

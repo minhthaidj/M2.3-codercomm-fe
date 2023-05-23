@@ -54,6 +54,7 @@ const slice = createSlice({
     deleteCommentSuccess(state, action) {
       state.isLoading = false;
       state.error = null;
+      delete state.commentsById[action.payload];
     },
   },
 });
@@ -82,7 +83,6 @@ export const getComments =
     } catch (error) {
       dispatch(slice.actions.hasError(error.message));
       toast.error(error.message);
-      console.log("error ở đây");
     }
   };
 
@@ -126,13 +126,12 @@ export const sendCommentReaction =
   };
 
 export const deleteComment =
-  ({ commentId, postId }) =>
+  ({ commentId }) =>
   async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
       await apiService.delete(`comments/${commentId}`);
       dispatch(slice.actions.deleteCommentSuccess(commentId));
-      dispatch(getComments({ postId }));
       toast.success("Comment deleted.");
     } catch (error) {
       dispatch(slice.actions.hasError(error.message));

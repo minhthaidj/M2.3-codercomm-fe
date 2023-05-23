@@ -62,16 +62,18 @@ const slice = createSlice({
     deletePostSuccess(state, action) {
       state.isLoading = false;
       state.error = null;
-      state.currentPagePosts = state.currentPagePosts.filter(
-        (postId) => postId !== action.payload
+      const index = state.currentPagePosts.findIndex(
+        (x) => x === action.payload
       );
-      delete state.postsById[action.payload];
+      state.currentPagePosts = state.currentPagePosts.slice(index + 1);
     },
     editPostSuccess(state, action) {
       state.isLoading = false;
       state.error = null;
-      const editPost = action.payload;
-      state.postsById[editPost] = editPost;
+      const content = action.payload.content;
+      const image = action.payload.image;
+      state.postsById[action.payload._id].content = content;
+      state.postsById[action.payload._id].image = image;
     },
   },
 });
@@ -155,11 +157,10 @@ export const editPost =
     try {
       const imageUrl = await cloudinaryUpload(image);
       const response = await apiService.put(`/posts/${_id}`, {
-        content,
+        content: content,
         image: imageUrl,
       });
-      console.log(response);
-      dispatch(slice.actions.editPostSuccess(response.data.data));
+      dispatch(slice.actions.editPostSuccess(response.data));
       toast.success("Your post has been updated.");
     } catch (error) {
       dispatch(slice.actions.hasError(error.message));

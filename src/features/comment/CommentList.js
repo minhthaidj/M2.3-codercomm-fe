@@ -33,18 +33,23 @@ function CommentList({ postId }) {
 
   let renderComments;
 
+  console.log("commentsById 1", commentsById);
+
   if (commentsByPost) {
     const comments = commentsByPost.map((commentId) => commentsById[commentId]);
     renderComments = (
       <Stack spacing={1.5}>
-        {comments.map((comment) => (
-          <CommentCard key={comment._id} comment={comment} />
-        ))}
+        {comments.map(
+          (comment) =>
+            comment && <CommentCard key={comment._id} comment={comment} />
+        )}
       </Stack>
     );
   } else if (isLoading) {
     renderComments = <LoadingScreen />;
   }
+
+  console.log("commentsById 2", commentsById);
 
   return (
     <Stack spacing={1.5}>

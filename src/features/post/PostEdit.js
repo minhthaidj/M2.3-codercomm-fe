@@ -18,7 +18,7 @@ const defaultValues = {
   image: "",
 };
 
-function PostEdit({ post = defaultValues }) {
+function PostEdit({ post = defaultValues, handleUpdateButtonClicked }) {
   const methods = useForm({
     resolver: yupResolver(yupSchema),
     defaultValues: { ...post },
@@ -26,7 +26,6 @@ function PostEdit({ post = defaultValues }) {
 
   const {
     handleSubmit,
-    reset,
     setValue,
     formState: { isSubmitting, isDirty },
   } = methods;
@@ -35,7 +34,8 @@ function PostEdit({ post = defaultValues }) {
   const { isLoading } = useSelector((state) => state.post);
 
   const onSubmit = (data) => {
-    dispatch(editPost(data)).then(() => reset());
+    dispatch(editPost(data));
+    handleUpdateButtonClicked();
   };
 
   const handleDrop = useCallback(
